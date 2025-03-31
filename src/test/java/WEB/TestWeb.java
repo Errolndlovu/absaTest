@@ -5,29 +5,56 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.edge.EdgeDriver;
+import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
 
+import java.io.FileInputStream;
 import java.io.*;
 import java.time.Duration;
 import java.util.List;
+import java.util.Properties;
 import java.util.Scanner;
 
 public class TestWeb {
-    WebDriver driver = new ChromeDriver();
+    WebDriver driver;
+    String baseUrl;
+    String browser;
 
-    public void setUp() {
-        WebDriverManager.chromedriver().setup();
-        driver.manage().window().maximize();
-        driver.get("https://www.way2automation.com/angularjs-protractor/webtables/");
+    public void setUp() throws IOException {
+
+        FileInputStream fis = new FileInputStream("src/test/resources/config.properties");
+        Properties properties = new Properties();
+        properties.load(fis);
+
+        baseUrl = properties.getProperty("webURL");
+        browser = properties.getProperty("runWithBrowser");
+        if ("Chrome".equalsIgnoreCase(browser)) {
+            WebDriverManager.chromedriver().setup();
+            driver = new ChromeDriver();
+            driver.manage().window().maximize();
+        } else if ("FireFox".equalsIgnoreCase(browser)) {
+            WebDriverManager.firefoxdriver().setup();
+            driver = new FirefoxDriver();
+            driver.manage().window().maximize();
+        } else if ("Edge".equalsIgnoreCase(browser)) {
+            WebDriverManager.edgedriver().setup();
+            driver = new EdgeDriver();
+            driver.manage().window().maximize();
+        }
+
+        driver.get(baseUrl);
     }
+
 
     public void verifyUserIsOnTheUserListTable() {
         WebElement userTable = driver.findElement(By.xpath("//*[@class='smart-table table table-striped']"));
         userTable.isDisplayed();
     }
+
     public void clickAddUser() {
         WebElement adduser = driver.findElement(By.xpath("//*[@class='btn btn-link pull-right']"));
         adduser.click();
@@ -141,7 +168,7 @@ public class TestWeb {
                 break;
             }
         }
-        Assert.assertTrue(userExists,  username + " was not added to the table!");
+        Assert.assertTrue(userExists, username + " was not added to the table!");
         System.out.println("Test Passed: " + username + " was successfully added!");
     }
 

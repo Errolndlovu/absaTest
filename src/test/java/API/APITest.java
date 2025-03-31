@@ -3,12 +3,26 @@ package API;
 import io.restassured.RestAssured;
 import io.restassured.path.json.JsonPath;
 import io.restassured.response.Response;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.util.Properties;
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.CoreMatchers.equalTo;
 
 public class APITest {
     static {
-        RestAssured.baseURI = "https://dog.ceo/api";
+        FileInputStream fis;
+        Properties properties;
+        String apiBase;
+        try {
+            fis = new FileInputStream("src/test/resources/config.properties");
+             properties = new Properties();
+            properties.load(fis);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        apiBase = properties.getProperty("apiBaseUrl");
+        RestAssured.baseURI = apiBase;
     }
 
     public void testAllBreeds() {

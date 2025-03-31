@@ -19,7 +19,7 @@ public class MyStepdefs {
 
 
     @Given("the user is on the way to automation site")
-    public void theUserIsOnTheWayToAutomationSite() {
+    public void theUserIsOnTheWayToAutomationSite() throws IOException {
         test.setUp();
         test.verifyUserIsOnTheUserListTable();
     }
