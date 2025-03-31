@@ -1,0 +1,13 @@
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+<suite name="Automation Suite">
+    <test name="Web UI Tests">
+        <classes>
+            <class name="WEB.TestWeb"/>
+        </classes>
+    </test>
+<!--    <test name="API Tests">-->
+<!--        <classes>-->
+<!--            <class name="tests.APITest"/>-->
+<!--        </classes>-->
+<!--    </test>-->
+</suite>
